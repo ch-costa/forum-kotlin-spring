@@ -1,12 +1,18 @@
 package br.com.github.chcosta.forum.model
 
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import javax.persistence.*
 
+@Entity
 data class Answer(
-    val id: Long?,
-    val message: String,
-    val creationDate: LocalDateTime,
-    val author: User,
-    val topic: Topic,
-    val solution: Boolean
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  val id: Long?,
+  val message: String,
+  val creationDate: Instant = Clock.System.now(),
+  @ManyToOne
+  val author: User,
+  @ManyToOne
+  val topic: Topic,
+  val solution: Boolean
 )

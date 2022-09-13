@@ -14,9 +14,9 @@ class TopicService(
     private var topics: List<Topic> = ArrayList(),
     private val topicViewMapper: TopicViewMapper,
     private val topicFormMapper: TopicFormMapper,
-    private val notFoundMessage: String = "Topic not found"
 ) {
 
+  private val notFoundMessage: String = "Topic not found"
   fun listTopics(): List<TopicView> {
 
     return topics.map { topic: Topic -> topicViewMapper.map(topic) }
@@ -60,6 +60,6 @@ class TopicService(
   }
 
   fun deleteTopic(id: Long) {
-    topics = topics.run { minus(this.filter { topic: Topic -> topic.id == id }) }
+    topics = topics.run { minus(this.filter { topic: Topic -> topic.id == id }.toSet()) }
   }
 }
