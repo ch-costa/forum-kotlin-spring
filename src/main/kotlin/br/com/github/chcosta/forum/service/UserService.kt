@@ -2,16 +2,12 @@ package br.com.github.chcosta.forum.service
 
 import br.com.github.chcosta.forum.model.User
 import org.springframework.stereotype.Service
+import br.com.github.chcosta.forum.repository.UserRepository
 
 @Service
-class UserService(var users: List<User>) {
+class UserService(private val repository: UserRepository) {
 
-  init {
-
-    val user = User(id = 1, name = "Ana da Silva", email = "ana@email.com.br")
-  }
-
-  fun findeAuthorById(id: Long): User? {
-    return users.find { user: User -> user.id == id }
+  fun findeAuthorById(id: Long): User {
+    return repository.getReferenceById(id)
   }
 }

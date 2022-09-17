@@ -7,6 +7,7 @@ import br.com.github.chcosta.forum.service.TopicService
 import javax.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 
@@ -20,11 +21,12 @@ class TopicController(private val service: TopicService) {
   }
 
   @GetMapping("/{id}")
-  fun findTopicById(@PathVariable id: Long): TopicView? {
+  fun findTopicById(@PathVariable id: Long): TopicView {
     return service.findTopicById(id)
   }
 
   @PostMapping
+  @Transactional
   fun createTopic(
       @RequestBody @Valid form: NewTopicForm,
       uriBuilder: UriComponentsBuilder
@@ -35,11 +37,13 @@ class TopicController(private val service: TopicService) {
   }
 
   @PutMapping
+  @Transactional
   fun updateTopic(@RequestBody @Valid form: UpdateTopicForm): ResponseEntity<TopicView> {
     val topicView: TopicView = service.updateTopic(form)
     return ResponseEntity.ok(topicView)
   }
 
+  @Transactional
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   fun deleteTopic(@PathVariable id: Long) {
