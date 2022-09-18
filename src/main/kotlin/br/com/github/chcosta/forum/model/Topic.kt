@@ -15,6 +15,7 @@ data class Topic(
   val course: Course,
   @ManyToOne
   val author: User,
+  @Column(name = "creation_date")
   val creationDate: LocalDateTime = LocalDateTime.now(),
   @OneToMany(mappedBy = "topic")
   val answer: List<Answer> = ArrayList(),
