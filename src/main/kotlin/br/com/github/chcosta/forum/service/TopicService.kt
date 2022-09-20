@@ -7,8 +7,10 @@ import br.com.github.chcosta.forum.exception.NotFoundException
 import br.com.github.chcosta.forum.mapper.TopicFormMapper
 import br.com.github.chcosta.forum.mapper.TopicViewMapper
 import br.com.github.chcosta.forum.model.Topic
-import org.springframework.stereotype.Service
 import br.com.github.chcosta.forum.repository.TopicRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Service
 
 @Service
 class TopicService(
@@ -18,9 +20,14 @@ class TopicService(
 ) {
 
   private val notFoundMessage: String = "Topic not found"
-  fun listTopics(): List<TopicView> {
+  fun listTopics(
+    courseName: String?,
+    pageable: Pageable
+  ): Page<TopicView> {
 
-    return repository.findAll().map { topic: Topic -> topicViewMapper.map(topic) }
+    val topics =
+      if (courseName == null) repository.findAll(pageable) else repository.findByCourseName(courseName, pageable)
+    return topics.map { topic: Topic -> topicViewMapper.map(topic) }
   }
 
   fun findTopicById(topicId: Long): TopicView {
