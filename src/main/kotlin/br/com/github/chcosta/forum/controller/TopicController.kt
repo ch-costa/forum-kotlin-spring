@@ -4,6 +4,8 @@ import br.com.github.chcosta.forum.dto.NewTopicForm
 import br.com.github.chcosta.forum.dto.TopicView
 import br.com.github.chcosta.forum.dto.UpdateTopicForm
 import br.com.github.chcosta.forum.service.TopicService
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -18,6 +20,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/topics")
 class TopicController(private val service: TopicService) {
+
+  @Cacheable("listOfTopics")
   @GetMapping
   fun listTopics(
     @RequestParam(required = false) courseName: String?,
@@ -33,10 +37,12 @@ class TopicController(private val service: TopicService) {
 
   @PostMapping
   @Transactional
+  @CacheEvict(value = ["listOfTopics"], allEntries = true)
   fun createTopic(
     @RequestBody @Valid form: NewTopicForm,
     uriBuilder: UriComponentsBuilder
   ): ResponseEntity<TopicView> {
+
     val topicView: TopicView = service.createTopic(form)
     val uri = uriBuilder.path("/topics/${topicView.id}").build().toUri()
     return ResponseEntity.created(uri).body(topicView)
@@ -44,13 +50,16 @@ class TopicController(private val service: TopicService) {
 
   @PutMapping
   @Transactional
+  @CacheEvict(value = ["listOfTopics"], allEntries = true)
   fun updateTopic(@RequestBody @Valid form: UpdateTopicForm): ResponseEntity<TopicView> {
+
     val topicView: TopicView = service.updateTopic(form)
     return ResponseEntity.ok(topicView)
   }
 
   @Transactional
   @DeleteMapping("/{id}")
+  @CacheEvict(value = ["listOfTopics"], allEntries = true)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   fun deleteTopic(@PathVariable id: Long) {
     service.deleteTopic(id)

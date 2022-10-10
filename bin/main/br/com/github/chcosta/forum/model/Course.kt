@@ -1,3 +1,12 @@
 package br.com.github.chcosta.forum.model
 
-data class Course(val id: Long?, val name: String, val category: String)
+import javax.persistence.*
+
+@Entity
+@Table(name = "tb_courses")
+data class Course(
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  val id: Long?,
+  val name: String,
+  val category: String
+)

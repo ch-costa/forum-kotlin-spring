@@ -1,20 +1,13 @@
 package br.com.github.chcosta.forum.service
 
 import br.com.github.chcosta.forum.model.Course
-import java.util.*
 import org.springframework.stereotype.Service
+import br.com.github.chcosta.forum.repository.CourseRepository
 
 @Service
-class CourseService(var courses: List<Course>) {
+class CourseService(private val repository: CourseRepository) {
 
-  init {
-
-    val course = Course(id = 1, name = "Kotlin", category = "Programação")
-
-    courses = Arrays.asList(course)
-  }
-
-  fun findeCourseById(id: Long): Course? {
-    return courses.find { course: Course -> course.id == id }
+  fun findeCourseById(id: Long): Course {
+    return repository.getReferenceById(id)
   }
 }

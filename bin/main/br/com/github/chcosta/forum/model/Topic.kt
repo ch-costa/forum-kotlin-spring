@@ -1,15 +1,24 @@
 package br.com.github.chcosta.forum.model
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import java.time.LocalDateTime
+import javax.persistence.*
 
+
+@Entity
+@Table(name = "tb_topics")
 data class Topic(
-    var id: Long? = null,
-    val title: String,
-    val message: String,
-    val course: Course?,
-    val author: User?,
-    val creationDate: Instant = Clock.System.now(),
-    val answer: List<Answer> = ArrayList(),
-    val status: TopicStatus = TopicStatus.NOT_ANSWERED
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  var id: Long? = null,
+  var title: String,
+  var message: String,
+  @ManyToOne
+  val course: Course,
+  @ManyToOne
+  val author: User,
+  @Column(name = "creation_date")
+  val creationDate: LocalDateTime = LocalDateTime.now(),
+  @OneToMany(mappedBy = "topic")
+  val answer: List<Answer> = ArrayList(),
+  @Enumerated(value = EnumType.STRING)
+  val status: TopicStatus = TopicStatus.NOT_ANSWERED
 )

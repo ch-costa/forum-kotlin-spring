@@ -17,4 +17,3 @@ spring:
   h2:
     console:
       path: /forum-console
-      enabled: true
