@@ -1,6 +1,7 @@
 package br.com.github.chcosta.forum.controller
 
 import br.com.github.chcosta.forum.dto.NewTopicForm
+import br.com.github.chcosta.forum.dto.TopicByCategory
 import br.com.github.chcosta.forum.dto.TopicView
 import br.com.github.chcosta.forum.dto.UpdateTopicForm
 import br.com.github.chcosta.forum.service.TopicService
@@ -64,4 +65,10 @@ class TopicController(private val service: TopicService) {
   fun deleteTopic(@PathVariable id: Long) {
     service.deleteTopic(id)
   }
+
+  @GetMapping("/report")
+  fun reportOfTopics(): List<TopicByCategory> {
+    return service.reportOfTopics()
+  }
 }
+

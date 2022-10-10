@@ -1,6 +1,7 @@
 package br.com.github.chcosta.forum.service
 
 import br.com.github.chcosta.forum.dto.NewTopicForm
+import br.com.github.chcosta.forum.dto.TopicByCategory
 import br.com.github.chcosta.forum.dto.TopicView
 import br.com.github.chcosta.forum.dto.UpdateTopicForm
 import br.com.github.chcosta.forum.exception.NotFoundException
@@ -56,5 +57,9 @@ class TopicService(
 
   fun deleteTopic(id: Long) {
     repository.deleteById(id)
+  }
+
+  fun reportOfTopics(): List<TopicByCategory> {
+    return repository.reportOfTopics()
   }
 }
